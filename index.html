@@ -14,6 +14,8 @@
             font-family: 'Inter', sans-serif;
             background-color: #1a202c; /* bg-gray-900 */
             color: #e2e8f0; /* text-gray-100 */
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+            cursor: none; /* Hide default cursor */
         }
 
         /* Custom animations */
@@ -63,9 +65,89 @@
             border-bottom-width: 2px;
             border-color: #2dd4bf; /* border-teal-400 */
         }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(45, 212, 191, 0.7); /* Teal-400 with transparency */
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+            z-index: 9999;
+            box-shadow: 0 0 15px rgba(45, 212, 191, 0.8);
+        }
+
+        #custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(236, 72, 153, 0.8); /* Pink-500 with transparency */
+            box-shadow: 0 0 25px rgba(236, 72, 153, 1);
+        }
+
+        /* Phone mockup styling for project cards */
+        .phone-mockup {
+            position: relative;
+            padding: 2.5rem 1.5rem; /* Adjust padding to create inner screen space */
+            border-radius: 2.5rem; /* More rounded corners for phone look */
+            background-color: #2d3748; /* Darker gray for phone body */
+            border: 8px solid #4a5568; /* Border for phone frame */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.5);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 0.5rem;
+            background-color: #1a202c; /* Speaker cutout */
+            border-radius: 0.25rem;
+        }
+
+        .phone-mockup::after {
+            content: '';
+            position: absolute;
+            bottom: 0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: 0.5rem;
+            background-color: #1a202c; /* Home button/chin area */
+            border-radius: 0.25rem;
+        }
+
+        /* Adjust project card content for phone mockup */
+        .phone-mockup .project-content {
+            background-color: #1a202c; /* Inner screen background */
+            border-radius: 1rem;
+            padding: 1.5rem;
+            min-height: 250px; /* Ensure content area is visible */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .phone-mockup h3 {
+            color: #2dd4bf; /* Teal for project titles */
+        }
+        .phone-mockup p.text-purple-300 {
+            color: #d8b4fe; /* Lighter purple for technologies */
+        }
+        .phone-mockup ul {
+            color: #cbd5e0; /* Gray for list items */
+        }
     </style>
 </head>
 <body class="min-h-screen">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
     <!-- Navigation Bar -->
     <nav class="fixed top-0 left-0 right-0 bg-gray-800 bg-opacity-90 backdrop-blur-sm shadow-lg z-50 p-4">
         <div class="container mx-auto flex justify-between items-center">
@@ -82,29 +164,40 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden">
+    <section id="home" class="relative h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden">
         <div class="absolute inset-0 z-0 opacity-10">
             <!-- Animated background circles -->
             <div class="absolute w-40 h-40 bg-teal-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob top-10 left-1/4"></div>
             <div class="absolute w-40 h-40 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 bottom-10 right-1/4"></div>
             <div class="absolute w-40 h-40 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
         </div>
-        <div class="relative z-10 text-center p-8 bg-gray-800 bg-opacity-70 rounded-xl shadow-2xl animate-fade-in-up">
+        <div class="relative z-10 text-center p-8 bg-gray-800 bg-opacity-70 rounded-xl shadow-2xl animate-fade-in-up flex flex-col items-center">
+            <!-- User Image -->
+            <img src="https://placehold.co/150x150/2dd4bf/ffffff?text=Raviraj" alt="Raviraj Sindra" class="rounded-full w-36 h-36 object-cover border-4 border-teal-400 mb-6 shadow-lg transform hover:scale-110 transition-transform duration-300 ease-in-out">
+
             <h2 class="text-5xl font-extrabold text-white mb-4 leading-tight">
                 Hello, I'm <span class="text-teal-400">Raviraj Sindra</span>
             </h2>
             <p class="text-2xl text-gray-300 font-light">
                 A passionate <span class="font-semibold text-purple-300">React Native Developer</span>
             </p>
-            <button id="view-my-work-btn" class="mt-8 px-8 py-3 bg-teal-500 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-teal-600 transition duration-300 ease-in-out transform hover:scale-105">
-                View My Work
-            </button>
+            <div class="flex space-x-4 mt-8">
+                <button id="view-my-work-btn" class="px-8 py-3 bg-teal-500 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-teal-600 transition duration-300 ease-in-out transform hover:scale-105">
+                    View My Work
+                </button>
+                <a href="https://github.com/Golu-ux/Golu-ux.github.io/raw/main/DOC-20250515-WA0005.pdf" download="Raviraj_Sindra_Resume.pdf" class="px-8 py-3 bg-purple-600 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l3-3m-3 3l-3-3m2.828-9.172a4 4 0 00-5.656 0L10 9.343l-2.828-2.829a4 4 0 00-5.656 0l-1.414 1.414a4 4 0 000 5.656L10 17.657l-1.414 1.414a4 4 0 000 5.656L12 24l2.828-2.829a4 4 0 000-5.656L12 10z" />
+                    </svg>
+                    Download Resume
+                </a>
+            </div>
         </div>
     </section>
 
     <main class="container mx-auto px-4 py-16 pt-24">
         <!-- Summary Section -->
-        <section id="summary" class="py-16 animate-fade-in-left">
+        <section id="summary" class="py-16 opacity-0 translate-x-[-20px] transition-all duration-800 ease-out">
             <h2 class="text-4xl font-bold text-center text-white mb-10 relative pb-4">
                 Summary
                 <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-teal-500 rounded-full"></span>
@@ -118,7 +211,7 @@
         </section>
 
         <!-- Tech Stack Section -->
-        <section id="tech-stack" class="py-16 animate-fade-in-right">
+        <section id="tech-stack" class="py-16 opacity-0 translate-x-[20px] transition-all duration-800 ease-out">
             <h2 class="text-4xl font-bold text-center text-white mb-10 relative pb-4">
                 Tech Stack
                 <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-teal-500 rounded-full"></span>
@@ -158,7 +251,7 @@
         </section>
 
         <!-- Experience Section -->
-        <section id="experience" class="py-16 animate-fade-in-left">
+        <section id="experience" class="py-16 opacity-0 translate-x-[-20px] transition-all duration-800 ease-out">
             <h2 class="text-4xl font-bold text-center text-white mb-10 relative pb-4">
                 Experience
                 <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-teal-500 rounded-full"></span>
@@ -180,55 +273,63 @@
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-16 animate-fade-in-right">
+        <section id="projects" class="py-16 opacity-0 translate-x-[20px] transition-all duration-800 ease-out">
             <h2 class="text-4xl font-bold text-center text-white mb-10 relative pb-4">
                 Projects
                 <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-teal-500 rounded-full"></span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
-                    <h3 class="text-2xl font-semibold text-white mb-2">Blinks - Matchmaking App</h3>
-                    <p class="text-purple-300 text-md mb-4">Technologies: React Native, Firebase, Sqlite, REST API, Video Call SDK, Chat</p>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li>Developed this application all by myself that helps people in matchmaking, online dating and chatting.</li>
-                        <li>Implemented post and story sharing on the application.</li>
-                        <li>Added Zego Cloud video calling SDK, and Stripe for payments.</li>
-                    </ul>
+                <div class="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 phone-mockup">
+                    <div class="project-content">
+                        <h3 class="text-2xl font-semibold mb-2">Blinks - Matchmaking App</h3>
+                        <p class="text-md mb-4">Technologies: React Native, Firebase, Sqlite, REST API, Video Call SDK, Chat</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Developed this application all by myself that helps people in matchmaking, online dating and chatting.</li>
+                            <li>Implemented post and story sharing on the application.</li>
+                            <li>Added Zego Cloud video calling SDK, and Stripe for payments.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
-                    <h3 class="text-2xl font-semibold text-white mb-2">Wash Squad - Car Washing Service</h3>
-                    <p class="text-purple-300 text-md mb-4">Technologies: React Native, REST API, Redux, Socket-io, Apple Pay</p>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li>Designed and developed a mobile application for seamless car washing bookings.</li>
-                        <li>Implemented a structured two-panel system: Customer, Helper.</li>
-                        <li>Utilized Map SDK and live location tracking in the application.</li>
-                    </ul>
+                <div class="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 phone-mockup">
+                    <div class="project-content">
+                        <h3 class="text-2xl font-semibold mb-2">Wash Squad - Car Washing Service</h3>
+                        <p class="text-md mb-4">Technologies: React Native, REST API, Redux, Socket-io, Apple Pay</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Designed and developed a mobile application for seamless car washing bookings.</li>
+                            <li>Implemented a structured two-panel system: Customer, Helper.</li>
+                            <li>Utilized Map SDK and live location tracking in the application.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
-                    <h3 class="text-2xl font-semibold text-white mb-2">Ubragga! - Quiz Game App</h3>
-                    <p class="text-purple-300 text-md mb-4">Technologies: React Native, Redux, In-app Purchases, Socket-io, In-app Subscription, Wallet System</p>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li>Developed a quiz game application where users can play with each other and win prizes.</li>
-                        <li>Integrated Socket.io for user interactions and game play.</li>
-                        <li>Implemented in-app purchases and in-app subscription using Google payment system.</li>
-                    </ul>
+                <div class="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 phone-mockup">
+                    <div class="project-content">
+                        <h3 class="text-2xl font-semibold mb-2">Ubragga! - Quiz Game App</h3>
+                        <p class="text-md mb-4">Technologies: React Native, Redux, In-app Purchases, Socket-io, In-app Subscription, Wallet System</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Developed a quiz game application where users can play with each other and win prizes.</li>
+                            <li>Integrated Socket.io for user interactions and game play.</li>
+                            <li>Implemented in-app purchases and in-app subscription using Google payment system.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
-                    <h3 class="text-2xl font-semibold text-white mb-2">Quadro - E-commerce application</h3>
-                    <p class="text-purple-300 text-md mb-4">Technologies: React Native, Firebase, One signal, Redux, Stripe</p>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li>Designed an interactive platform for users to be able buy auto parts with categorisation based on vehicle types.</li>
-                        <li>Enhanced UI responsiveness for seamless user experience across both Android and iOS devices.</li>
-                        <li>Optimized and scaled the application for improved performance and stability.</li>
-                        <li>Integrated Firebase Authentication for secure phone-based OTP verification.</li>
-                        <li>Implemented REST API integration to streamline data handling and app functionalities.</li>
-                    </ul>
+                <div class="bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 phone-mockup">
+                    <div class="project-content">
+                        <h3 class="text-2xl font-semibold mb-2">Quadro - E-commerce application</h3>
+                        <p class="text-md mb-4">Technologies: React Native, Firebase, One signal, Redux, Stripe</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Designed an interactive platform for users to be able buy auto parts with categorisation based on vehicle types.</li>
+                            <li>Enhanced UI responsiveness for seamless user experience across both Android and iOS devices.</li>
+                            <li>Optimized and scaled the application for improved performance and stability.</li>
+                            <li>Integrated Firebase Authentication for secure phone-based OTP verification.</li>
+                            <li>Implemented REST API integration to streamline data handling and app functionalities.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-16 animate-fade-in-up">
+        <section id="contact" class="py-16 opacity-0 translate-y-[20px] transition-all duration-800 ease-out">
             <h2 class="text-4xl font-bold text-center text-white mb-10 relative pb-4">
                 Contact
                 <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-teal-500 rounded-full"></span>
@@ -293,16 +394,51 @@
             }
         });
 
-        // Highlight active navigation item on scroll
+        // Highlight active navigation item on scroll and trigger section animations
         const sections = document.querySelectorAll('section[id]');
         const navItems = document.querySelectorAll('.nav-item');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3 // Trigger when 30% of the section is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translate(0, 0)';
+                } else {
+                    // Optional: reset animation state if section goes out of view
+                    // This creates a re-animation effect on scroll back
+                    // For a one-time animation, remove this else block
+                    if (entry.target.id === 'summary' || entry.target.id === 'experience') {
+                        entry.target.style.opacity = '0';
+                        entry.target.style.transform = 'translateX(-20px)';
+                    } else if (entry.target.id === 'tech-stack' || entry.target.id === 'projects') {
+                        entry.target.style.opacity = '0';
+                        entry.target.style.transform = 'translateX(20px)';
+                    } else if (entry.target.id === 'contact') {
+                        entry.target.style.opacity = '0';
+                        entry.target.style.transform = 'translateY(20px)';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
 
         window.addEventListener('scroll', () => {
             let currentActive = 'home';
             sections.forEach(section => {
-                const sectionTop = section.offsetTop - document.querySelector('nav').offsetHeight;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+                const navHeight = document.querySelector('nav').offsetHeight;
+                const sectionTop = section.offsetTop - navHeight - 1; // -1 for buffer
+                const sectionBottom = sectionTop + section.offsetHeight;
+
+                if (pageYOffset >= sectionTop && pageYOffset < sectionBottom) {
                     currentActive = section.id;
                 }
             });
@@ -315,9 +451,24 @@
             });
         });
 
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.classList.add('active');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('active');
+            });
+        });
+
         // Initial active state for navigation
         window.dispatchEvent(new Event('scroll'));
     </script>
 </body>
 </html>
-
